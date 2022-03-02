@@ -5,20 +5,20 @@
 #include <string>
 
 using namespace std;
-class superSquareRoot{
-    string s;
-};
-string sqr(string n) { 
-    // returns the largest value of m such that m*m < n.
-    //Eg sqr("29") = 5
-    // //n is a 2-digit num
-    int m = 1;
-    while (m * m <= stoi(n)) {
-        m++;
-    }
-    return to_string(m-1);
-}
 
+string add(string a, string b)
+{
+    a = string(max(a.size(), b.size()) + 1 - a.size(), '0') + a;
+    b = string(a.size() - b.size(), '0') + b;
+    for (int i = a.size() - 1, carry = 0; i >= 0; i--)
+    {
+        int sum = a[i] + b[i] - 96 + carry;
+        carry = sum / 10;
+        a[i] = sum % 10 + '0';
+    }
+    int i = a.find_first_not_of('0');
+    return 0 <= i ? a.substr(i) : a.substr(0, 1);
+}
 string multiply(const string& t, const string& b)
 { 
     //t and b can be very large
@@ -40,12 +40,7 @@ string multiply(const string& t, const string& b)
 
     return (res.size() == 0) ? "0" : res;
 }
-
 string subtract(string a, string b) {
-    //return  a - b * lastdigit(b)
-    // //a>b
-    // a and b can be very large numbers
-
     string str = "";
 
     int n1 = a.length(), n2 = b.length();
@@ -85,7 +80,7 @@ string subtract(string a, string b) {
 }
 
 bool compare(string a, string b) {
-    //returns 1 if a>b
+    //returns 1 if a > b else return 0;
     // a and b are very large numbers
     if (a.length() > b.length()) { return 1;}
     if (a.length() < b.length()) { return 0;}
@@ -100,73 +95,55 @@ bool compare(string a, string b) {
 
 }
 
-string last(string c, string n) {
-    //returns largest value of k such that left(k) * k <= n 
-    // update ("8","556") = 86 because 86*6<556
-    // c and n can be very large
-    int k = 9;
-    string newstr = c + to_string(k);
-    string prod= multiply(newstr, to_string(k));
-    
-    while (compare(prod, n) == 1) {
-        k--;
-        newstr = c + to_string(k);
-        prod = multiply(newstr, to_string(k));
-    }
-    cout << "product  :" << prod << endl;
-    return to_string(k);
-
-}
-string add(string a, string b)
-{
-    a = string(max(a.size(), b.size()) + 1 - a.size(), '0') + a;
-    b = string(a.size() - b.size(), '0') + b;
-    for (int i = a.size() - 1, carry = 0; i >= 0; i--)
-    {
-        int sum = a[i] + b[i] - 96 + carry;
-        carry = sum / 10;
-        a[i] = sum % 10 + '0';
-    }
-    int i = a.find_first_not_of('0');
-    return 0 <= i ? a.substr(i) : a.substr(0, 1);
-}
 string removeleadingzeroes(string str) {
     //remove leading zeroes
     int i = str.find_first_not_of('0');
     return 0 <= i ? str.substr(i) : str.substr(0, 1);
 }
-string integer_square_root(string s) {
-    long long n = s.length(); 
-    if(s.length()<19){ // s is still small so use in-built square root function instead
+
+string vedic_square_root(const string s, long long precision) {
+    const long long n = s.length(); 
+    if(s.length()<2){ // USE 19. s is still small so use in-built square root function instead
         long long ans = sqrt(stoll(s));
         return to_string(ans);
     }
     string ans="", group="", col="";
-    int startindex;
+    long long i; //index
 
-    if (n % 2 == 0) { //1st group contains 2 digits and other groups contain 2 digits
+    if (n % 2 == 0) { //leftmost group contains 2 digits and all other groups contain 2 digits
         group += to_string(s[0]-'0') + to_string(s[1]-'0');
-        startindex = 2;
+        i = 2;
     }
-    else { //1st gtroup contains 1 digit and other groups contain 2 digits
+    else { //leftmost gtroup contains 1 digit and other groups contain 2 digits
         group += to_string(s[0] - '0');
-        startindex = 1;
+        i = 1;
     }
-    ans = sqr(group);
+
+    //initialise ans, col, group
+    ans = to_string(int(sqrt(stoi(group))));
     col = to_string(2 * stoi(ans));
     group = to_string(stoi(group) - stoi(ans) * stoi(ans)); //group = group - ans^2
 
+    bool AddDecimalPoint=0;
 
+    while (i < s.length() - 1 || precision > 0) {
+        if(i < s.length() - 1 ){
+            //drop 2 digits from s
+            group += to_string(s[i] - '0') + to_string(s[i + 1] - '0');
+            group = removeleadingzeroes(group);
+            i+=2;
+            if(i>=s.length() - 1){AddDecimalPoint=1;}
+        }else{
+            group+="00";
+            precision--;
+        }
 
-    for (int i = startindex;i < s.length() - 1;i += 2) {
-        group += to_string(s[i] - '0') + to_string(s[i + 1] - '0');
-        group = removeleadingzeroes(group);
 
         //We must now find the largest value of k such that (col(k)) * k <= group 
+        //can be optimised using binary search algorithm
         int k = 9;
         string newstr = col + to_string(k); // newstr = (col(k))
         string prod = multiply(newstr, to_string(k));
-
         while (compare(prod, group) == 1) {
             k--;
             newstr = col + to_string(k);
@@ -177,11 +154,27 @@ string integer_square_root(string s) {
         col += to_string(k);
 
         group = subtract(group, prod); //group =  group - prod
-        //double the last digit of col
+        //new col = last digit of col + col
         col = add(col, to_string(int(col[col.length() - 1] - '0')));
+        if(AddDecimalPoint){ans+=".";AddDecimalPoint=0;}
     }
+
     return ans;
 }
- int main(){
-     cout<<integer_square_root("53425");
- }
+
+int main(){
+     //cout<<vedic_square_root("2930455",100); //Does not round off 
+    string col="3", group="54";
+ 
+    //find the largest integer value of k such that (col(k)) * k <= group 
+    // largest(3,54) = 1
+    int k = 0;
+    string colk, prod;
+
+    for(int jump = 5; jump>=1; jump/=2){
+        colk=col+to_string(k);
+        prod = multiply(colk, to_string(k));
+        while(k+jump<10 && compare(group, prod)){k+=jump;}
+    }
+    cout<<k<<"\n";
+}
