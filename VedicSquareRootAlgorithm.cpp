@@ -1,7 +1,13 @@
 #include <iostream>
+#include <vector>
+#include <cmath>
+#include <regex>
 #include <string>
 
 using namespace std;
+class superSquareRoot{
+    string s;
+};
 string sqr(string n) { 
     // returns the largest value of m such that m*m < n.
     //Eg sqr("29") = 5
@@ -77,6 +83,7 @@ string subtract(string a, string b) {
     int i = str.find_first_not_of('0');
     return 0 <= i ? str.substr(i) : str.substr(0, 1);
 }
+
 bool compare(string a, string b) {
     //returns 1 if a>b
     // a and b are very large numbers
@@ -92,6 +99,7 @@ bool compare(string a, string b) {
     return 0;
 
 }
+
 string last(string c, string n) {
     //returns largest value of k such that left(k) * k <= n 
     // update ("8","556") = 86 because 86*6<556
@@ -128,21 +136,19 @@ string removeleadingzeroes(string str) {
     return 0 <= i ? str.substr(i) : str.substr(0, 1);
 }
 string integer_square_root(string s) {
-    //solve manually for 1-digit numbers
-    if (s == "1"||s=="2"||s=="3") { return "1"; }
-    if (s == "4" || s == "5" || s == "6" || s == "7" || s == "8") { return "2"; }
-    if (s == "9") { return "3";}
-
     long long n = s.length(); 
-    string ans="";
-    string group="",col="";
+    if(s.length()<19){ // s is still small so use in-built square root function instead
+        long long ans = sqrt(stoll(s));
+        return to_string(ans);
+    }
+    string ans="", group="", col="";
     int startindex;
 
-    if (n % 2 == 0) { 
+    if (n % 2 == 0) { //1st group contains 2 digits and other groups contain 2 digits
         group += to_string(s[0]-'0') + to_string(s[1]-'0');
         startindex = 2;
     }
-    else {
+    else { //1st gtroup contains 1 digit and other groups contain 2 digits
         group += to_string(s[0] - '0');
         startindex = 1;
     }
@@ -176,3 +182,6 @@ string integer_square_root(string s) {
     }
     return ans;
 }
+ int main(){
+     cout<<integer_square_root("53425");
+ }
