@@ -1,9 +1,12 @@
 #include <iostream>
+#include <vector>
 #include <cmath>
 #include <regex>
 #include <string>
+#include <chrono>
 #define ll long long
 using namespace std;
+using namespace std::chrono;
 
 string add(string a, string b)
 {
@@ -100,6 +103,7 @@ string removeleadingzeroes(string str) {
     return 0 <= i ? str.substr(i) : str.substr(0, 1);
 }
 
+
 bool ok (string group, string col, int jump, int k){
     //prod = col(jump + k) * (jump + k)
     //returns false if prod < group 
@@ -121,6 +125,7 @@ bool ok (string group, string col, int jump, int k){
     }
     return 0;
 }
+
 
 string vedic_square_root(const string s, long long precision) {
     const long long n = s.length(); 
@@ -192,17 +197,46 @@ string vedic_square_root(const string s, long long precision) {
     return ans;
 }
 
+
+ll TimeAlgorithm(string p, ll precision) {
+        auto start = high_resolution_clock::now();
+        vedic_square_root(p,precision);
+        auto stop = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(stop - start);
+        return  duration.count(); 
+}
+
+string GenerateRandomNumber(ll n) {
+    //Generates a random positive integer having n digits. n > 0
+    string num = "0"; 
+
+    //first digit must be non-zero.
+    while (num == "0") {
+        num = to_string(rand() % 10);
+    }
+    n--;
+    //other digits can be 0-9
+    while (n--) {
+        num += to_string(rand() % 10); 
+    }
+    return num;
+}
+
 int main(){
-    string n ="0";
-    ll p = 0;
+    ios::sync_with_stdio(0);
+    cin.tie(0);
 
-    cout<<"Enter number : \n";
-    cin>>n;
+    ll t = 50; //number of test cases
+    ll c = 0; //number of times Algo0 took less time than Algo1
+    ll vedic0total = 0;
+    ll precision =100;
+    for (ll i = 0;i < t;i++) {
+           if (i % 10 == 0) { cout <<i << "\n";}
+            ll NumberOfDigits = 1000; //this number is varied
+            string n1 = GenerateRandomNumber(NumberOfDigits); 
 
-    cout<<"Enter precision : \n";
-    cin>>p;
-
-    cout<<"Square root is : \n";
-    cout<<vedic_square_root(n,p)<<"\n";
-
+            ll t0 = TimeAlgorithm(n1,precision); 
+            vedic0total += t0;
+    }
+    cout << "Averate time Algo0() :" << vedic0total / t << "\n";
 }
