@@ -103,10 +103,8 @@ string removeleadingzeroes(string str) {
 
 string vedic_square_root(const string s, long long precision) {
     const long long n = s.length(); 
-    if(s.length()<2){ // USE 19. s is still small so use in-built square root function instead
-        long long ans = sqrt(stoll(s));
-        return to_string(ans);
-    }
+    if(s.length()==0)return "INVALID";
+
     string ans="", group="", col="";
     long long i; //index
 
@@ -124,6 +122,15 @@ string vedic_square_root(const string s, long long precision) {
     col = to_string(2 * stoi(ans));
     group = to_string(stoi(group) - stoi(ans) * stoi(ans)); //group = group - ans^2
 
+    //corner case : is s has less than 2 digits, decide whether or not to put decimal point before entering big loop
+    if(i>s.length()-1){
+        if(multiply(ans,ans)==s){ //if perfect square, there are no decimals
+            return ans;
+        }else{
+            ans+=".";
+        }
+    }
+
     bool AddDecimalPoint=0;
 
     while (i < s.length() - 1 || precision > 0) {
@@ -132,12 +139,13 @@ string vedic_square_root(const string s, long long precision) {
             group += to_string(s[i] - '0') + to_string(s[i + 1] - '0');
             group = removeleadingzeroes(group);
             i+=2;
-            if(i>=s.length() - 1){AddDecimalPoint=1;}
+            if(i>=s.length() - 1){ //integer square root part is complete
+                AddDecimalPoint = 1;
+            }
         }else{
             group+="00";
             precision--;
         }
-
 
         //We must now find the largest value of k such that (col(k)) * k <= group 
         //can be optimised using binary search algorithm
@@ -156,25 +164,46 @@ string vedic_square_root(const string s, long long precision) {
         group = subtract(group, prod); //group =  group - prod
         //new col = last digit of col + col
         col = add(col, to_string(int(col[col.length() - 1] - '0')));
+        if(i>s.length()-1 && multiply(ans,ans)==s)return ans; //if perfect square, there are no decimals
+
         if(AddDecimalPoint){ans+=".";AddDecimalPoint=0;}
     }
 
     return ans;
 }
 
+bool ok (string group, string col, int jump, int k){
+    //prod = col(jump + k) * (jump + k)
+    //returns false if prod < group 
+    //returns true if  prod >= group
+
+    string colk = col + to_string(jump+k);
+    string prod = multiply(colk, to_string(jump+k));
+
+    //Now compare
+    if (prod.length() < group.length()) { return 0;} // prod smaller
+    if (prod.length() > group.length()) { return 1;} //prod larger
+    if(prod==group)return 1; //prod equal to group
+
+    prod = string(max(prod.size(), group.size()) + 1 - prod.size(), '0') + prod;
+    group = string(prod.size() - group.size(), '0') + group;
+    for (int i = 0;i < prod.length();i++) {
+        if (int(prod[i]-'0') > int(group[i]-'0')) { return 1; }
+        if (int(prod[i] - '0') < int(group[i] - '0')) { return 0; }
+    }
+    return 0;
+}
+
 int main(){
-     //cout<<vedic_square_root("2930455",100); //Does not round off 
-    string col="3", group="54";
+    //MIGHT not work for "17",5
+    cout<<vedic_square_root("30654",5); //Does not round off 
+    string col="21", group="41";
  
     //find the largest integer value of k such that (col(k)) * k <= group 
-    // largest(3,54) = 1
-    int k = 0;
-    string colk, prod;
-
+    // largest(2,549) = 1
+/*     int k = 0;
     for(int jump = 5; jump>=1; jump/=2){
-        colk=col+to_string(k);
-        prod = multiply(colk, to_string(k));
-        while(k+jump<10 && compare(group, prod)){k+=jump;}
+        while (k+jump<10 && !ok(group,col,jump, k)) k += jump;
     }
-    cout<<k<<"\n";
+    cout<<k<<"\n"; */
 }
