@@ -122,7 +122,7 @@ bool ok (string group, string col, int jump, int k){
     return 0;
 }
 
-string vedic_square_root(const string s, long long precision) {
+string square_root(const string s, long long precision) {
     const long long n = s.length(); 
     if(s.length()==0)return "INVALID";
 
@@ -203,6 +203,6 @@ int main(){
     cin>>p;
 
     cout<<"Square root is : \n";
-    cout<<vedic_square_root(n,p)<<"\n";
+    cout<<square_root(n,p)<<"\n";
 
 }
