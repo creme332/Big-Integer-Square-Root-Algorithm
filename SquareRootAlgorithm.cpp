@@ -20,7 +20,6 @@ string add(string a, string b)
 }
 string multiply(const string& t, const string& b)
 { 
-    //t and b can be very large
     int tsize = static_cast<int>(t.size());
     int bsize = static_cast<int>(b.size());
 
@@ -58,22 +57,18 @@ string subtract(string a, string b) {
 
         str.push_back(sub + '0');
     }
-
-    // subtract remaining digits of str1[]
     for (int i = n1 - n2 - 1; i >= 0; i--) {
         if (a[i] == '0' && carry) {
             str.push_back('9');
             continue;
         }
         int sub = ((a[i] - '0') - carry);
-        if (i > 0 || sub > 0) // remove preceding 0's
+        if (i > 0 || sub > 0) 
             str.push_back(sub + '0');
         carry = 0;
     }
 
     reverse(str.begin(), str.end());
-
-    //remove leading zeroes
     int i = str.find_first_not_of('0');
     return 0 <= i ? str.substr(i) : str.substr(0, 1);
 }
@@ -104,7 +99,7 @@ bool ok (string group, string col, int jump, int k){
     //prod = col(jump + k) * (jump + k)
     //returns false if prod < group 
     //returns true if  prod >= group
-
+    //ok("124", "1", 3, 1) returns false because 14 * 4 < 124
     string colk = col + to_string(jump+k);
     string prod = multiply(colk, to_string(jump+k));
 
