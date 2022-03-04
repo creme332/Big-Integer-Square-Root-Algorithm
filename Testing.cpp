@@ -127,7 +127,7 @@ bool ok (string group, string col, int jump, int k){
 }
 
 
-string vedic_square_root(const string s, long long precision) {
+string square_root(const string s, long long precision) {
     const long long n = s.length(); 
     if(s.length()==0)return "INVALID";
 
@@ -200,7 +200,7 @@ string vedic_square_root(const string s, long long precision) {
 
 ll TimeAlgorithm(string p, ll precision) {
         auto start = high_resolution_clock::now();
-        vedic_square_root(p,precision);
+        square_root(p,precision);
         auto stop = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>(stop - start);
         return  duration.count(); 
@@ -228,15 +228,13 @@ int main(){
 
     ll t = 50; //number of test cases
     ll c = 0; //number of times Algo0 took less time than Algo1
-    ll vedic0total = 0;
+    ll total = 0; //total time
     ll precision =100;
     for (ll i = 0;i < t;i++) {
            if (i % 10 == 0) { cout <<i << "\n";}
             ll NumberOfDigits = 1000; //this number is varied
             string n1 = GenerateRandomNumber(NumberOfDigits); 
-
-            ll t0 = TimeAlgorithm(n1,precision); 
-            vedic0total += t0;
+            total += TimeAlgorithm(n1,precision);
     }
-    cout << "Averate time Algo0() :" << vedic0total / t << "\n";
+    cout << "Averate time Algo0() :" << total / t << "\n";
 }
