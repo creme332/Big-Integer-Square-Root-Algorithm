@@ -6,8 +6,11 @@ An explanation of the method can be found here : https://xlinux.nist.gov/dads/HT
 
 # Function call #
 ```cpp
+int main(){
 square_root("42", 1) //returns 6.4
 square_root("42", 2) //returns 6.48
 square_root("42", 3) //returns 6.480
 square_root("42", 4) //returns 6.4807
+}
+
 ```
