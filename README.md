@@ -1,6 +1,6 @@
 # 💻Square root calculator
 
-Square root calculator to any degree of accuracy.
+Square root calculator of large numbers to any degree of accuracy.
 
 ```
 Enter number : 48954351
@@ -42,5 +42,5 @@ https://www.geeksforgeeks.org/long-division-method-to-find-square-root-with-exam
 # ⏰ Time and space complexity #
 Time complexity : O(n^2)
 
-Space complexity : O(n)
+Space complexity : O(1)
 
