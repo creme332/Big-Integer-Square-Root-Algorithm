@@ -164,7 +164,7 @@ string square_root(const string s, long long precision) {
         }
 
         //We must now find the largest value of k such that (col(k)) * k <= group 
-        //can be optimised using binary search algorithm
+        //using binary search algorithm is used
 
         int k = 0;
         for(int jump = 5; jump>=1; jump/=2)
@@ -191,13 +191,13 @@ int main(){
     string n ="0";
     ll p = 0;
 
-    cout<<"Enter number : \n";
+    cout<<"Enter number : ";
     cin>>n;
 
-    cout<<"Enter precision : \n";
+    cout<<"\nEnter precision : ";
     cin>>p;
 
-    cout<<"Square root is : \n";
+    cout<<"\nSquare root is : \n";
     cout<<square_root(n,p)<<"\n";
 
 }
