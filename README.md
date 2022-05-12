@@ -42,5 +42,5 @@ https://www.geeksforgeeks.org/long-division-method-to-find-square-root-with-exam
 # ⏰ Time and space complexity #
 Time complexity : O(n^2)
 
-Space complexity : O(1)
+Space complexity : O(n)
 
