@@ -1,6 +1,6 @@
-# 💻 Square root calculator
+# Square Root Calculator
 
-Calculates the square root of large numbers to any degree of accuracy.
+Calculates the square root of large numbers in string format to any degree of accuracy.
 
 ```
 Enter number : 48954351
@@ -26,20 +26,15 @@ Square root is :
  ```
 </details>
 
-# ⭐Features #
+## ⭐Features
 - Calculator takes a string as argument so the square root of numbers larger than $2^{32}$ can be calculated.
 - Precision of answer can be varied.
 
-# 📰Explanation #
-Long division is used to calculate square root. 
+## Algorithm
+Long division method is used to calculate square root. Explanations of the method can be found here :
+- https://xlinux.nist.gov/dads/HTML/squareRoot.html
+- https://www.geeksforgeeks.org/long-division-method-to-find-square-root-with-examples/
 
-Explanations of the method can be found here :
-
-https://xlinux.nist.gov/dads/HTML/squareRoot.html
-
-https://www.geeksforgeeks.org/long-division-method-to-find-square-root-with-examples/
-
-# ⏰ Time and space complexity #
 Time complexity : $\mathbb O(n^2)$
 
 Space complexity : $\mathbb O(n)$
